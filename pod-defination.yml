@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+  name: myapp-pod
+  namespace: default
+  labels:
+    app: myapp
+    type: front-end
+
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+
+
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+  name: redis
+  namespace: finance
+  labels:
+    app: redis
+    type: backend
+
+spec:
+  containers:
+    - name: redis-container
+      image: redis

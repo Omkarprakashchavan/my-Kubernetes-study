@@ -1,0 +1,94 @@
+Pods:
+
+-- Pod is smallet element which holds the containers
+
+kubectl get Pods
+kube get pods --all-namespace
+kubectl create -f <pod-defination.yml>
+kubectl describe Pod <Pod-name>
+kubectl edit Pod <Pod-name>
+kubectl delete pod <pod-name>
+
+======================================================================================================================================
+
+Replica Set:
+
+-- ReplicaSet holds Pods and Used to create the Replica of Pods
+
+kubectl get ReplicaSet
+kubectl get rs
+kubectl create -f replicaset-defination.yml
+kubectl replace -f replicaset-defination.yml
+kubectl edit ReplicaSet <ReplicaSet-name>
+kubectl edit ReplicaSet <ReplicaSet-name.yml>
+kubectl edit rs <ReplicaSet-name>
+kubectl edit rs <ReplicaSet-name.yml>
+kubectl delete replicaset <ReplicaSet-name>
+kubectl delete <ReplicaSet-name.yml>
+kubectl scale --replicas=6 -f replicaset-defination.yml
+kubectl scale --replicas=6 replicaset <replicaset-name>
+
+======================================================================================================================================
+
+Deployments:
+
+-- In Deployment we can create complete set of deployment using one file
+
+kubectl get deployments
+kubectl create -f deployment-defination.yml
+kubectl replace -f deployment-defination.yml
+kubectl edit deployment <deployment-name>
+kubectl edit deployment <deployment-name.yml>
+kubectl edit deployment <deployment-name>
+kubectl edit deployment <deployment-name.yml>
+kubectl delete deployment <deployment-name>
+kubectl delete <deployment-name.yml>
+kubectl get all
+
+======================================================================================================================================
+
+Namespace:
+
+-- Namespace creates the Isolation of resources. By default kubernetes create default Namespace, kube-system, kube-dns.
+   all the services/Pods/deployment are available inside the Namespace
+
+mysql.connect("db-service") # to connect to the service within the Namespace
+mysql.connect("db.service.dev.svc.cluster.local")  # here cluster.local is domain, svc is service, dev is Namespace (other than default)
+db.service is service within dev Namespace
+
+kubectl create -f namespace-dev.yml
+kubectl create -f namespace dev
+kubectl create -f <pod-defination.yml> --namespace=dev
+kubectl get all --namespace=<namespace-name>
+kubectl get pods --namespace=dev
+kubectl get pods --namespace=default
+kubectl get pods --namespace=prods
+kubectl config set-context $(kubectl config current-context) --namespace=dev    # to set dev as default namespace
+kubectl config current-context                                                  # to get current context/namespace
+
+======================================================================================================================================
+
+resource-Quota:
+
+When several users or teams share a cluster with a fixed number of nodes, there is a concern that one team could use more than its fair 
+share of resources. Resource quotas are a tool for administrators to address this concern.
+defined by a ResourceQuota object, provides constraints that limit aggregate resource consumption per namespace. 
+It can limit the quantity of objects that can be created in a namespace by type, as well as the total amount of compute resources that 
+may be consumed by resources in that project
+
+-- To create resource compute Quota on the Hardware
+
+kubectl create -f compute-Quota.yml
+kubectl describe quota
+kubectl get quota --namespace=<namespace-name>
+kubectl describe quota <quota-name> --namespace=<namespace-name>
+
+======================================================================================================================================
+
+Services:
+
+--Services enable communication between various components within and outside of the application. Kubernetes services helps us connect 
+applications together with other applications or users.
+
+kubectl get services
+kubectl create -f <service-defination.yml>
