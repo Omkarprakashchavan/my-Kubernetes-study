@@ -9,6 +9,8 @@ kubectl describe Pod <Pod-name>
 kubectl edit Pod <Pod-name>
 kubectl delete pod <pod-name>
 
+# Imperative commands to create a pod == kubectl run --generator=run-pod/v1 redis --image=redis:alpine -l tier=db
+
 ======================================================================================================================================
 
 Replica Set:
@@ -45,6 +47,9 @@ kubectl delete deployment <deployment-name>
 kubectl delete <deployment-name.yml>
 kubectl get all
 
+# Imperative commands to create a deployment == kubectl create deployment webapp --image=kodekloud/webapp-color 
+kubectl scale deployment/webapp --replicas=3
+
 ======================================================================================================================================
 
 Namespace:
@@ -53,7 +58,7 @@ Namespace:
    all the services/Pods/deployment are available inside the Namespace
 
 mysql.connect("db-service") # to connect to the service within the Namespace
-mysql.connect("db.service.dev.svc.cluster.local")  # here cluster.local is domain, svc is service, dev is Namespace (other than default)
+mysql.connect("db.service.dev.svc.cluster.local") # here cluster.local is domain, svc is service, dev is Namespace (other than default)
 db.service is service within dev Namespace
 
 kubectl create -f namespace-dev.yml
@@ -68,7 +73,7 @@ kubectl config current-context                                                  
 
 ======================================================================================================================================
 
-resource-Quota:
+Resource-Quota:
 
 When several users or teams share a cluster with a fixed number of nodes, there is a concern that one team could use more than its fair 
 share of resources. Resource quotas are a tool for administrators to address this concern.
@@ -92,3 +97,6 @@ applications together with other applications or users.
 
 kubectl get services
 kubectl create -f <service-defination.yml>
+
+# Imperative commands to create Services == kubectl expose pod redis --port=6379 --name redis-service
+kubectl expose deployment webapp-service --type=NodePort --port=8080 --name=webapp-service --dry-run -o yaml > webapp-service.yaml
