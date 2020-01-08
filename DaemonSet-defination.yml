@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+
+kind: DaemonSet
+
+metadata:
+  name: Monitoring-Agent
+
+
+spec:
+  template:
+    metadata:
+      name: Monitoring-Agent
+      labels:
+        app: Monitoring-Agent
+
+    spec:
+      containers:
+        - name: Monitoring-Agent-container
+          image: monitoring-agent
+
+  selector:
+    matchLabels:
+      app: Monitoring-Agent
+
+#========================================================
+
+apiVersion: apps/v1
+
+kind: DaemonSet
+
+metadata:
+  name: elasticsearch
+  namespace: kube-system
+
+
+spec:
+  template:
+    metadata:
+      name: elasticsearch
+      labels:
+        app: Monitoring-Agent
+
+    spec:
+      containers:
+        - name: elasticsearch-container
+          image: k8s.gcr.io/fluentd-elasticsearch:1.20
+
+  selector:
+    matchLabels:
+      app: Monitoring-Agent

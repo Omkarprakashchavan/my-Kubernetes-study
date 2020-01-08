@@ -5,3 +5,20 @@ Pod             v1
 Service         v1
 ReplicaSet      apps/v1
 Deployment      apps/v1
+
+
+CPU Requirements in POD:
+1 CPU is equal to:  1 VCPU in AWS
+                    1 Core in GCP
+                    1 Core in Azure
+                    1 Hyperthread
+
+
+Memory:
+1G (Gigabyte):      1000000000  byte
+1M (Megabyte):      1000000     byte
+1K (Kilobyte):      1000        byte
+
+1Gi (Gigibyte):     1073741824  byte
+1Mi (mebibyte):     1048576     byte
+1Ki (kibibyte):     1024        byte

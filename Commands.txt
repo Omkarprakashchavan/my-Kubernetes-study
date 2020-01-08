@@ -10,6 +10,7 @@ kubectl edit Pod <Pod-name>
 kubectl delete pod <pod-name>
 
 # Imperative commands to create a pod == kubectl run --generator=run-pod/v1 redis --image=redis:alpine -l tier=db
+kubectl run --generator=run-pod/v1 bee --image=nginx --tolerations=spray:mortein:NoSchedule
 
 ======================================================================================================================================
 
@@ -17,12 +18,12 @@ Replica Set:
 
 -- ReplicaSet holds Pods and Used to create the Replica of Pods
 
-kubectl get ReplicaSet
+kubectl get replicaset
 kubectl get rs
 kubectl create -f replicaset-defination.yml
 kubectl replace -f replicaset-defination.yml
-kubectl edit ReplicaSet <ReplicaSet-name>
-kubectl edit ReplicaSet <ReplicaSet-name.yml>
+kubectl edit replicaset <ReplicaSet-name>
+kubectl edit replicaset <ReplicaSet-name.yml>
 kubectl edit rs <ReplicaSet-name>
 kubectl edit rs <ReplicaSet-name.yml>
 kubectl delete replicaset <ReplicaSet-name>
@@ -100,3 +101,84 @@ kubectl create -f <service-defination.yml>
 
 # Imperative commands to create Services == kubectl expose pod redis --port=6379 --name redis-service
 kubectl expose deployment webapp-service --type=NodePort --port=8080 --name=webapp-service --dry-run -o yaml > webapp-service.yaml
+
+======================================================================================================================================
+
+Scheduler:
+
+-- Scheduler used to Schedule the pod on available nodes. If nodeName is specified in pod-defination.yml file then pod will be Schedule
+nodeName node. If nodeName is not defined then pod will be Schedule on next available node. Once Pod is created it cannot be movde to 
+any other node.
+To assign a node to existing pod binding object can be ceated and send POST request to Pod's binding API.
+
+Example: curl --header "Content-Type:application/json" --request POST --data '{"apiVersion":"v1", "kind": "Binding“ …. }'
+http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/
+
+======================================================================================================================================
+
+Taint and Tolerations:
+
+-- Taint are used to apply on the nodes and Tolerations are used to apply on Pods
+If a pod have same Tolerations as Taint of node then pod can be Schedule on node
+
+kubectl taint nodes node-name key=value:taint-effect
+# taint-effect is what happens to pod that do not tolerant the taint [NoSchedule | PreferNoSchedule | NoExecute]
+
+to remove taint effect from node use below command:
+kubectl taint nodes master node-role.kubernetes.io/master:NoSchedule-
+
+======================================================================================================================================
+
+Node Selector:
+
+-- nodeSelector is used to select the node for pod scheduling, it is noting but using label of the node
+For this we need to label the node, for labeling the node use below command:
+
+kubectl label node <node-name> <label-key>=<label-value>
+
+Drawback of nodeSelector is we can not use multiple tags for node Selector. Hence node affinity comes in picture, using which we can 
+include multiple labels for scheduling pod on required node
+
+======================================================================================================================================
+
+Node Affinity:
+
+-- The primary purpose of node affinity feature is to ensure that pods are hosted on particular notes.
+kubectl label node node01 color=blue    # labeling node
+
+======================================================================================================================================
+
+Minimum amount of CPU required by pod is 0.5 and memory is 256 MB
+To modify this values you have to edit pod-defination.yml file and add resource section in specification
+Minimum requirement of CPU can be set t0 1m, where m is in mili
+CPU Requirements in POD:
+1 CPU is equal to:  1 vCPU in AWS
+                    1 Core in GCP
+                    1 Core in Azure
+                    1 Hyperthread
+
+By default 1 container consumes 1 vCPU if not explicitly defined in pod-defination file
+By default 1 container consumes 256Mi if not explicitly defined in pod-defination file
+
+======================================================================================================================================
+
+Daemon Set:
+
+-- The daemon set ensures that one copy of the pod is always present in all nodes in the cluster.
+
+kubectl get daemonset
+kubectl create -f <daemonset-defination.yaml>
+kubectl describe daemonset <daemon-name>
+kubectl delete daemonset <daemon-name>
+kubectl edit daemonset <daemon-name>
+kubectl get daemonset <daemon-name> -o yaml > new-daemon.yaml
+
+======================================================================================================================================
+
+Scheduler:
+
+-- It has an algorithm that distributes pods across nodes evenly as well as takes into consideration
+
+kubectl get events
+kubectl logs my-custom-Scheduler --name-space=kube-system
+kubectl get componentstatuses

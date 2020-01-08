@@ -14,8 +14,28 @@ spec:
   containers:
     - name: nginx-alpine-container
       image: nredis:alpine
+      ports:
+        - containerPort: 8080
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: 1
+        limits:
+          memory: "2Gi"
+          cpu: 2
+  #SchedulerName: XYZ
 
+  
+  nodeName: node01
 
+  tolerations:
+    - key: "app"
+      operator: "Equal"
+      value: "Blue"
+      effect: "NoScheule"
+
+#======================================================================================================================================
+---
 apiVersion: v1
 
 kind: Pod
@@ -31,3 +51,13 @@ spec:
   containers:
     - name: redis-container
       image: redis
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "size"
+              operator: In | NotIn
+              values:
+                - Large
