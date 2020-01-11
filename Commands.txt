@@ -182,3 +182,33 @@ Scheduler:
 kubectl get events
 kubectl logs my-custom-Scheduler --name-space=kube-system
 kubectl get componentstatuses
+
+======================================================================================================================================
+
+Rolling Updates:
+
+kubectl rollout status deployment/<deployment-name>
+kubectl rollout history deployment/<deployment-name>
+kubectl apply -f deployment-defination.yaml
+kubectl set image deployment/<deployment-name> nginx=nginx:1.9.1
+
+Rollback:
+kubectl rollout undo deployment/<deployment-name>
+
+
+environment variable can be define in pod-defination.yaml file with key value pair | array format
+types of env are:
+1. Plain Key-Value pair
+2. ConfigMap: Maps. ConfigMaps are used to pass configuration data in the form of key value pairs in Kubernetes.
+   When it pod is created inject the config map into the pod.
+   So the key value pairs that are available as environment variables for the application hosted inside the container in the pod
+
+   kubectl create configmap <config-name> --from-literal=<key>-<value>
+   kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod
+   kubectl create configmap <config-name> --from-file=<path-to-file>
+   kubectl create configmap app-config --from-file=app_config.properties
+   kubectl create -f <config-map.yaml>
+   kubectl get configmaps
+   kubectl describe configmap
+   
+3. Secrets
