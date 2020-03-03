@@ -79,7 +79,7 @@ pipeline {
                     fileCopyOperation(excludes: '', flattenFiles: true, includes: 'datahub-deployment.sh', targetLocation: 'dist/'),
                     fileCopyOperation(excludes: '', flattenFiles: true, includes: 'bhcloudservice/config.json', targetLocation: 'dist/')])
                     fileOperations([fileRenameOperation(destination: "dist-${BUILD_NUMBER}", source: "dist")])
-                    fileOperations([fileZipOperation("dist-${BUILD_NUMBER}/")])
+                    fileOperations([fileZipOperation("dist-${BUILD_NUMBER}")])
                     fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: "dist-${BUILD_NUMBER}.zip", targetLocation: "${package_save_location}")])
                     echo "You can download the files from URL ${URL_download}dist-${BUILD_NUMBER}.zip"
                     message = "You can download the files from URL ${URL_download}dist-${BUILD_NUMBER}.zip"
